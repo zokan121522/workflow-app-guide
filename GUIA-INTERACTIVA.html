@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow-App 2.0 - Guía Interactiva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-card-hover: #22222f;
+            --text-primary: #ffffff;
+            --text-secondary: #8888aa;
+            --accent-primary: #6366f1;
+            --accent-secondary: #818cf8;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --border-color: #2a2a3a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-primary);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 16px;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon-purple { background: rgba(168, 85, 247, 0.2); }
+        .feature-icon-cyan { background: rgba(6, 182, 212, 0.2); }
+        .feature-icon-green { background: rgba(34, 197, 94, 0.2); }
+        .feature-icon-yellow { background: rgba(234, 179, 8, 0.2); }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Interactive Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .step {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .step-header:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .step-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .step-toggle {
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .step.expanded .step-toggle {
+            transform: rotate(180deg);
+        }
+
+        .step-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .step.expanded .step-content {
+            max-height: 800px;
+        }
+
+        .step-body {
+            padding: 0 24px 24px;
+        }
+
+        /* Visual Demo */
+        .demo-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .demo-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-dot-red { background: #ef4444; }
+        .demo-dot-yellow { background: #eab308; }
+        .demo-dot-green { background: #22c55e; }
+
+        .demo-title {
+            margin-left: 12px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .demo-content {
+            padding: 24px;
+        }
+
+        /* UI Mockup */
+        .ui-mockup {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ui-sidebar {
+            width: 200px;
+            background: var(--bg-secondary);
+            padding: 16px 0;
+            border-right: 1px solid var(--border-color);
+            float: left;
+            height: 400px;
+        }
+
+        .ui-nav-item {
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .ui-nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .ui-nav-item.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .ui-main {
+            margin-left: 200px;
+            padding: 24px;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .ui-header {
+            margin-bottom: 20px;
+        }
+
+        .ui-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .ui-header p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .ui-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .ui-stat-card {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .ui-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .ui-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .ui-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ui-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ui-table td {
+            padding: 12px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .flow-node {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 28px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .flow-node:hover {
+            border-color: var(--accent-primary);
+            transform: scale(1.05);
+        }
+
+        .flow-node-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .flow-node-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .flow-node-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .flow-arrow {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+        }
+
+        /* Architecture */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .arch-layer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .arch-layer-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arch-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .arch-item {
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Interactive Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .code-body {
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .code-keyword { color: #c678dd; }
+        .code-string { color: #98c379; }
+        .code-comment { color: #5c6370; font-style: italic; }
+        .code-function { color: #61afef; }
+        .code-number { color: #d19a66; }
+
+        /* Progress Indicator */
+        .progress-demo {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 3px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .progress-circle {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .progress-step.completed .progress-circle {
+            border-color: var(--accent-green);
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-step.active .progress-label {
+            color: var(--text-primary);
+        }
+
+        .progress-line {
+            flex: 1;
+            height: 3px;
+            background: var(--border-color);
+            margin-top: -30px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .arch-grid { grid-template-columns: 1fr; }
+            .ui-sidebar { display: none; }
+            .ui-main { margin-left: 0; }
+            .flow-container { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">
+            <div class="nav-logo-icon">W</div>
+            <span>Workflow-App 2.0</span>
+        </div>
+        <div class="nav-links">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#how-it-works" class="nav-link">Cómo Funciona</a>
+            <a href="#architecture" class="nav-link">Arquitectura</a>
+            <a href="#workflow" class="nav-link">Workflows</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Version 2.0 - Lanzamiento 2026
+        </div>
+        <h1>Workflow-App 2.0</h1>
+        <p>La aplicación de escritorio para gestionar repositorios GitHub, Issues, Pull Requests y automatizar tu flujo de trabajo con IA.</p>
+        <div class="hero-cta">
+            <a href="#how-it-works" class="btn btn-primary">Comenzar Guía</a>
+            <a href="https://github.com" class="btn btn-secondary" target="_blank">Ver en GitHub</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="section-header">
+            <div class="section-number">1</div>
+            <h2>Características Principales</h2>
+            <p class="section-desc">Todo lo que necesitas para gestionar tu código en un solo lugar</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-purple">☁️</div>
+                <h3>GitHub Integration</h3>
+                <p>Conecta con la API de GitHub para gestionar repositorios, issues y pull requests de forma nativa.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-cyan">🤖</div>
+                <h3>AI Integration</h3>
+                <p>Genera commit messages, descripciones de PRs y secciones de SPEC.md usando IA local o en la nube.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-green">🔄</div>
+                <h3>Bidirectional Sync</h3>
+                <p>Sincroniza entre GitHub y repositorios locales. Detección automática de cambios git.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-yellow">⚡</div>
+                <h3>Workflow Automation</h3>
+                <p>Crea flujos de trabajo visuales con triggers y acciones. Ejecuta automatizaciones con un click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-purple">📋</div>
+                <h3>Spec-Driven Development</h3>
+                <p>Editor visual de SPEC.md con validación y generación de secciones con IA.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-cyan">🔌</div>
+                <h3>OpenCode Integration</h3>
+                <p>Ejecuta comandos de OpenCode y gestiona git hooks para tu flujo de desarrollo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section">
+        <div class="section-header">
+            <div class="section-number">2</div>
+            <h2>Cómo Funciona</h2>
+            <p class="section-desc">Aprende paso a paso cómo usar la aplicación</p>
+        </div>
+
+        <div class="steps-container">
+            <!-- Step 1 -->
+            <div class="step active" onclick="toggleStep(this)">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-info">
+                        <h3>Configuración Inicial</h3>
+                        <p>Conecta tu cuenta de GitHub y configura la IA</p>
+                    </div>
+                    <div class="step-toggle">▼</div>
+                </div>
+                <div class="step-content">
+                    <div class="step-body">
+                        <p>El primer paso es configurar tu cuenta de GitHub y elegir tu proveedor de IA preferido.</p>
+                        
+                        <div class="demo-container">
+                            <div class="demo-toolbar">
+                                <div class="demo-dot demo-dot-red"></div>
+                                <div class="demo-dot demo-dot-yellow"></div>
+                                <div class="demo-dot demo-dot-green"></div>
+                                <span class="demo-title">Settings - AI Configuration</span>
+                            </div>
+                            <div class="demo-content">
+                                <div style="display: flex; gap: 20px;">
+                                    <div style="flex: 1;">
+                                        <label style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-bottom: 8px;">Provider</label>
+                                        <select style="width: 100%; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">
+                                            <option>🦙 Ollama (Local)</option>
+                                            <option>🤖 OpenAI</option>
+                                            <option>🧠 Claude</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-bottom: 8px;">Model</label>
+                                        <input type="text" value="llama3.2" style="width: 100%; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">
+                                    </div>
+                                </div>
+                                <div style="margin-top: 16px;">
+                                    <label style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-bottom: 8px;">API Key</label>
+                                    <input type="password" placeholder="ghp_xxxxxxxxxxxx" style="width: 100%; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">
+                                </div>
+                                <button style="margin-top: 16px; padding: 10px 20px; background: var(--accent-primary); border: none; border-radius: 6px; color: white; cursor: pointer;">Guardar Configuración</button>
+                            </div>
+                        </div>
+
+                        <div class="flow-container" style="margin-top: 30px;">
+                            <div class="flow-node">
+                                <div class="flow-node-icon">🔑</div>
+                                <div class="flow-node-title">GitHub Token</div>
+                                <div class="flow-node-desc">ghp_xxx...</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-node">
+                                <div class="flow-node-icon">🤖</div>
+                                <div class="flow-node-title">AI Provider</div>
+                                <div class="flow-node-desc">Ollama/OpenAI/Claude</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-node">
+                                <div class="flow-node-icon">💾</div>
+                                <div class="flow-node-title">~/.workflows/</div>
+                                <div class="flow-node-desc">Configuración guardada</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-info">
+                        <h3>Dashboard - Vista Principal</h3>
+                        <p>Explora todos tus repositorios en un solo lugar</p>
+                    </div>
+                    <div class="step-toggle">▼</div>
+                </div>
+                <div class="step-content">
+                    <div class="step-body">
+                        <p>El Dashboard muestra todos tus repositorios de GitHub y locales con estadísticas en tiempo real.</p>
+                        
+                        <div class="demo-container">
+                            <div class="demo-toolbar">
+                                <div class="demo-dot demo-dot-red"></div>
+                                <div class="demo-dot demo-dot-yellow"></div>
+                                <div class="demo-dot demo-dot-green"></div>
+                                <span class="demo-title">Dashboard - Workflow-App</span>
+                            </div>
+                            <div class="demo-content">
+                                <div class="ui-mockup">
+                                    <div class="ui-sidebar">
+                                        <div class="ui-nav-item active">📊 Dashboard</div>
+                                        <div class="ui-nav-item">📋 SPEC Editor</div>
+                                        <div class="ui-nav-item">⚡ Workflows</div>
+                                        <div class="ui-nav-item">🤖 AI Config</div>
+                                        <div class="ui-nav-item">🔌 Integrations</div>
+                                        <div class="ui-nav-item">⚙️ Settings</div>
+                                    </div>
+                                    <div class="ui-main">
+                                        <div class="ui-header">
+                                            <h3>📊 DASHBOARD</h3>
+                                            <p>All your repositories • 📁 studyFlow • 🌿 main</p>
+                                        </div>
+                                        <div class="ui-stats">
+                                            <div class="ui-stat-card">
+                                                <div class="ui-stat-value">12</div>
+                                                <div class="ui-stat-label">Repositories</div>
+                                            </div>
+                                            <div class="ui-stat-card">
+                                                <div class="ui-stat-value">28</div>
+                                                <div class="ui-stat-label">Open Issues</div>
+                                            </div>
+                                            <div class="ui-stat-card">
+                                                <div class="ui-stat-value">5</div>
+                                                <div class="ui-stat-label">Open PRs</div>
+                                            </div>
+                                            <div class="ui-stat-card">
+                                                <div class="ui-stat-value">8</div>
+                                                <div class="ui-stat-label">Local Repos</div>
+                                            </div>
+                                        </div>
+                                        <table class="ui-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Repository</th>
+                                                    <th>Location</th>
+                                                    <th>Issues</th>
+                                                    <th>PRs</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>📁 workflow-app</td>
+                                                    <td>☁️💻 Both</td>
+                                                    <td>3</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>📁 studyFlow</td>
+                                                    <td>💻 Local</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>📁 my-api</td>
+                                                    <td>☁️ GitHub</td>
+                                                    <td>12</td>
+                                                    <td>2</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-info">
+                        <h3>Gestión de Issues</h3>
+                        <p>Crea, edita y sincroniza issues con GitHub</p>
+                    </div>
+                    <div class="step-toggle">▼</div>
+                </div>
+                <div class="step-content">
+                    <div class="step-body">
+                        <p>Gestiona Issues de forma visual con soporte para etiquetas, asignados y comentarios.</p>
+
+                        <div class="progress-demo">
+                            <div class="progress-step completed">
+                                <div class="progress-circle">✓</div>
+                                <div class="progress-label">Crear Issue</div>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step active">
+                                <div class="progress-circle">2</div>
+                                <div class="progress-label">Añadir Detalles</div>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step">
+                                <div class="progress-circle">3</div>
+                                <div class="progress-label">Asignar Labels</div>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step">
+                                <div class="progress-circle">4</div>
+                                <div class="progress-label">Sync a GitHub</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">Issue Creation Flow</div>
+                            <div class="code-body">
+<span class="code-comment">// 1. Create Issue locally</span>
+<span class="code-keyword">new</span> IssueItem(title, body, labels);
+
+<span class="code-comment">// 2. Sync to GitHub</span>
+<span class="code-function">syncService</span>.<span class="code-function">syncIssue</span>(issue);
+
+<span class="code-comment">// 3. GitHub API called</span>
+POST /repos/{owner}/{repo}/issues
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-info">
+                        <h3>SPEC Editor - Spec-Driven Development</h3>
+                        <p>Documenta tu proyecto siguiendo metodologías ágiles</p>
+                    </div>
+                    <div class="step-toggle">▼</div>
+                </div>
+                <div class="step-content">
+                    <div class="step-body">
+                        <p>El editor de SPEC.md te ayuda a documentar tu proyecto con generación asistida por IA.</p>
+                        
+                        <div class="tabs">
+                            <div class="tab active" onclick="switchTab(this, 'editor')">Editor</div>
+                            <div class="tab" onclick="switchTab(this, 'preview')">Preview</div>
+                            <div class="tab" onclick="switchTab(this, 'ai')">AI Assistant</div>
+                        </div>
+
+                        <div class="tab-content active" id="editor">
+                            <div class="code-block">
+                                <div class="code-header">SPEC.md - Nuevo Proyecto</div>
+                                <div class="code-body" style="color: var(--text-secondary);">
+<span class="code-comment">## 1. Overview</span>
+Descripción breve del proyecto...
+
+<span class="code-comment">## 2. Functionality</span>
+### 2.1 Core Features
+<span class="code-dim">- Feature 1</span>
+<span class="code-dim">- Feature 2</span>
+
+<span class="code-comment">## 3. Edge Cases</span>
+<span class="code-dim">- Edge case 1</span>
+
+<span class="code-comment">## 4. Acceptance Criteria</span>
+<span class="code-dim">[ ] Criterion 1</span>
+<span class="code-dim">[ ] Criterion 2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="ai">
+                            <div style="background: var(--bg-card); padding: 20px; border-radius: 8px; margin-top: 16px;">
+                                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px;">
+                                    <span style="font-size: 1.5rem;">✨</span>
+                                    <div>
+                                        <div style="font-weight: 600;">AI Assistant</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Powered by Ollama</div>
+                                    </div>
+                                </div>
+                                <p style="color: var(--text-secondary); margin-bottom: 16px;">¿En qué puedo ayudarte?</p>
+                                <div style="display: flex; gap: 8px;">
+                                    <button style="padding: 8px 16px; background: var(--accent-primary); border: none; border-radius: 6px; color: white; cursor: pointer;">Generar Sección</button>
+                                    <button style="padding: 8px 16px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); cursor: pointer;">Validar SPEC</button>
+                                    <button style="padding: 8px 16px; background: var(--accent-green); border: none; border-radius: 6px; color: white; cursor: pointer;">Generar Todo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-info">
+                        <h3>Workflows - Automatización</h3>
+                        <p>Crea flujos de trabajo visuales con triggers y acciones</p>
+                    </div>
+                    <div class="step-toggle">▼</div>
+                </div>
+                <div class="step-content">
+                    <div class="step-body">
+                        <p>Los workflows te permiten automatizar tareas repetitivas con una interfaz visual.</p>
+
+                        <div class="flow-container">
+                            <div class="flow-node" style="border-color: var(--accent-yellow);">
+                                <div class="flow-node-icon">▶️</div>
+                                <div class="flow-node-title">TRIGGER</div>
+                                <div class="flow-node-desc">Manual / Git / Schedule</div>
+                            </div>
+                            <div class="flow-arrow" style="color: var(--text-secondary);">→</div>
+                            <div class="flow-node">
+                                <div class="flow-node-icon">1</div>
+                                <div class="flow-node-title">Step 1</div>
+                                <div class="flow-node-desc">git-pull</div>
+                            </div>
+                            <div class="flow-arrow" style="color: var(--text-secondary);">→</div>
+                            <div class="flow-node">
+                                <div class="flow-node-icon">2</div>
+                                <div class="flow-node-title">Step 2</div>
+                                <div class="flow-node-desc">ai-generate-commit</div>
+                            </div>
+                            <div class="flow-arrow" style="color: var(--text-secondary);">→</div>
+                            <div class="flow-node" style="border-color: var(--accent-green);">
+                                <div class="flow-node-icon">✓</div>
+                                <div class="flow-node-title">COMPLETE</div>
+                                <div class="flow-node-desc">git-push</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">spec-driven.yml</div>
+                            <div class="code-body">
+<span class="code-keyword">name</span>: <span class="code-string">"Spec-Driven Development"</span>
+<span class="code-keyword">description</span>: <span class="code-string">"Generate code from spec"</span>
+<span class="code-keyword">trigger</span>:
+  <span class="code-keyword">type</span>: manual
+
+<span class="code-keyword">steps</span>:
+  - <span class="code-keyword">name</span>: <span class="code-string">"Generate Code"</span>
+    <span class="code-keyword">action</span>: <span class="code-string">"ai-generate"</span>
+    <span class="code-keyword">inputs</span>:
+      <span class="code-keyword">prompt</span>: <span class="code-string">"{{spec}}"</span>
+  
+  - <span class="code-keyword">name</span>: <span class="code-string">"Create Branch"</span>
+    <span class="code-keyword">action</span>: <span class="code-string">"git-create-branch"</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="step" onclick="toggleStep(this)">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-info">
+                        <h3>Integración con OpenCode</h3>
+                        <p>Ejecuta comandos de IA y gestiona git hooks</p>
+                    </div>
+                    <div class="step-toggle">▼</div>
+                </div>
+                <div class="step-content">
+                    <div class="step-body">
+                        <p>Conecta con OpenCode para ejecutar comandos de IA directamente en tu código.</p>
+
+                        <div class="features-grid" style="margin-top: 20px;">
+                            <div class="feature-card">
+                                <div class="feature-icon feature-icon-green">⚡</div>
+                                <h3>Generate Commit</h3>
+                                <p>Genera mensajes de commit con IA</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon feature-icon-purple">🔍</div>
+                                <h3>Code Review</h3>
+                                <p>Revisa tu código automáticamente</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon feature-icon-cyan">🧪</div>
+                                <h3>Generate Tests</h3>
+                                <p>Crea tests unitarios con IA</p>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 24px 0 16px;">Git Hooks Disponibles</h4>
+                        <div class="features-grid">
+                            <div class="feature-card" style="padding: 16px;">
+                                <h3 style="font-size: 1rem;">post-commit</h3>
+                                <p style="font-size: 0.85rem;">Ejecuta tras cada commit</p>
+                            </div>
+                            <div class="feature-card" style="padding: 16px;">
+                                <h3 style="font-size: 1rem;">pre-push</h3>
+                                <p style="font-size: 0.85rem;">Valida antes de push</p>
+                            </div>
+                            <div class="feature-card" style="padding: 16px;">
+                                <h3 style="font-size: 1rem;">commit-msg</h3>
+                                <p style="font-size: 0.85rem;">Valida formato de commit</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="section">
+        <div class="section-header">
+            <div class="section-number">3</div>
+            <h2>Arquitectura</h2>
+            <p class="section-desc">Cómo está estructurada la aplicación internamente</p>
+        </div>
+
+        <div class="arch-grid">
+            <div class="arch-layer">
+                <div class="arch-layer-title">📊 Modelos</div>
+                <div class="arch-items">
+                    <div class="arch-item">Repository.java</div>
+                    <div class="arch-item">IssueItem.java</div>
+                    <div class="arch-item">PullRequestItem.java</div>
+                    <div class="arch-item">Workflow.java</div>
+                    <div class="arch-item">ProjectState.java</div>
+                </div>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-title">⚙️ Servicios</div>
+                <div class="arch-items">
+                    <div class="arch-item">GitHubService.java</div>
+                    <div class="arch-item">SyncService.java</div>
+                    <div class="arch-item">AIService.java</div>
+                    <div class="arch-item">WorkflowEngine.java</div>
+                    <div class="arch-item">StateManager.java</div>
+                </div>
+            </div>
+            <div class="arch-layer">
+                <div class="arch-layer-title">🖥️ Vistas</div>
+                <div class="arch-items">
+                    <div class="arch-item">DashboardView.java</div>
+                    <div class="arch-item">RepoView.java</div>
+                    <div class="arch-item">SpecEditorView.java</div>
+                    <div class="arch-item">WorkflowsView.java</div>
+                    <div class="arch-item">AIView.java</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-container" style="margin-top: 40px;">
+            <div class="flow-node" style="border-color: var(--accent-purple);">
+                <div class="flow-node-icon">🖥️</div>
+                <div class="flow-node-title">JavaFX UI</div>
+                <div class="flow-node-desc">Vistas y componentes</div>
+            </div>
+            <div class="flow-arrow">↕</div>
+            <div class="flow-node" style="border-color: var(--accent-cyan);">
+                <div class="flow-node-icon">⚙️</div>
+                <div class="flow-node-title">Servicios</div>
+                <div class="flow-node-desc">Lógica de negocio</div>
+            </div>
+            <div class="flow-arrow">↕</div>
+            <div class="flow-node" style="border-color: var(--accent-green);">
+                <div class="flow-node-icon">☁️</div>
+                <div class="flow-node-title">GitHub API</div>
+                <div class="flow-node-desc">REST API v3</div>
+            </div>
+            <div class="flow-arrow">↕</div>
+            <div class="flow-node" style="border-color: var(--accent-yellow);">
+                <div class="flow-node-icon">🤖</div>
+                <div class="flow-node-title">AI Providers</div>
+                <div class="flow-node-desc">OpenAI/Claude/Ollama</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <h4 style="margin-bottom: 16px;">State Management</h4>
+            <div class="code-block" style="max-width: 600px; margin: 0 auto;">
+                <div class="code-header">~/.workflows/</div>
+                <div class="code-body" style="text-align: left;">
+<span class="code-keyword">config/</span>    <span class="code-comment"># AI & theme config</span>
+<span class="code-keyword">state/</span>     <span class="code-comment"># Current project/branch</span>
+<span class="code-keyword">workflows/</span> <span class="code-comment"># YAML workflows</span>
+<span class="code-keyword">ai/</span>         <span class="code-comment"># Prompt templates</span>
+<span class="code-keyword">hooks/</span>     <span class="code-comment"># Git hooks</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="section">
+        <div class="section-header">
+            <div class="section-number">4</div>
+            <h2>Flujo de Trabajo Completo</h2>
+            <p class="section-desc">Desde la idea hasta el código deployado</p>
+        </div>
+
+        <div class="flow-container" style="flex-direction: column; align-items: stretch; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 20px 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <div style="width: 40px; height: 40px; background: var(--accent-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                <div style="flex: 1;">
+                    <h4 style="margin-bottom: 4px;">📋 Crear SPEC.md</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Documenta los requisitos del proyecto usando el editor visual o genera secciones con IA</p>
+                </div>
+                <span style="padding: 6px 12px; background: rgba(168, 85, 247, 0.2); border-radius: 6px; font-size: 0.8rem;">Spec Editor</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 20px 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <div style="width: 40px; height: 40px; background: var(--accent-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                <div style="flex: 1;">
+                    <h4 style="margin-bottom: 4px;">⚡ Crear Workflow</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Define un workflow que lea el SPEC y genere código automáticamente</p>
+                </div>
+                <span style="padding: 6px 12px; background: rgba(6, 182, 212, 0.2); border-radius: 6px; font-size: 0.8rem;">Workflow Editor</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 20px 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <div style="width: 40px; height: 40px; background: var(--accent-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+                <div style="flex: 1;">
+                    <h4 style="margin-bottom: 4px;">▶️ Ejecutar Workflow</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Lanza el workflow desde la app o desde OpenCode para generar código</p>
+                </div>
+                <span style="padding: 6px 12px; background: rgba(34, 197, 94, 0.2); border-radius: 6px; font-size: 0.8rem;">Workflow Engine</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 20px 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <div style="width: 40px; height: 40px; background: var(--accent-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</div>
+                <div style="flex: 1;">
+                    <h4 style="margin-bottom: 4px;">🔄 Sync & Push</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Sincroniza cambios con GitHub y crea Issues/PRs automáticamente</p>
+                </div>
+                <span style="padding: 6px 12px; background: rgba(234, 179, 8, 0.2); border-radius: 6px; font-size: 0.8rem;">Sync Service</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 20px 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <div style="width: 40px; height: 40px; background: var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">5</div>
+                <div style="flex: 1;">
+                    <h4 style="margin-bottom: 4px;">🤖 Revisión con IA</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Usa OpenCode para revisar el código generado y sugerir mejoras</p>
+                </div>
+                <span style="padding: 6px 12px; background: rgba(99, 102, 241, 0.2); border-radius: 6px; font-size: 0.8rem;">OpenCode</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p style="margin-bottom: 16px; font-size: 1.2rem; font-weight: 600;">Workflow-App 2.0</p>
+        <p>Desktop application for GitHub + AI workflow automation</p>
+        <p style="margin-top: 16px; font-size: 0.85rem;">Hecho con JavaFX • GitHub API • Ollama/OpenAI/Claude</p>
+    </footer>
+
+    <script>
+        // Interactive Steps
+        function toggleStep(step) {
+            const wasExpanded = step.classList.contains('expanded');
+            
+            // Close all steps
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('expanded');
+                s.classList.remove('active');
+            });
+            
+            // Toggle current step
+            if (!wasExpanded) {
+                step.classList.add('expanded');
+                step.classList.add('active');
+            }
+        }
+
+        // Tab switching
+        function switchTab(tab, contentId) {
+            // Update tabs
+            tab.parentElement.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            tab.classList.add('active');
+            
+            // Update content
+            tab.parentElement.parentElement.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+            });
+            document.getElementById(contentId).classList.add('active');
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-card, .step, .arch-layer').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Expand first step by default on load
+        setTimeout(() => {
+            document.querySelector('.step').classList.add('expanded');
+            document.querySelector('.step').classList.add('active');
+        }, 500);
+    </script>
+</body>
+</html>
